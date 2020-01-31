@@ -1,43 +1,43 @@
 # simple repository for data science on ubuntu:python3.6
 
-# Available for VSCode
+## Available for VSCode
 you can use on VSCode like `Open Folder in Container`
 
-# Available docker-compose independently
+## Available docker-compose independently
 
-## build
+### build
 
 ```bash
 docker-compose build --no-cache
 ```
 
-## up
+### up
 
 ```bash
 docker-compose up
 ```
 
-## down
+### down
 
 ```bash
 docker-compose down
 ```
 
-# Available Makefile for task controls
+## Available Makefile for task controls
 
-## up
+### up
 
 ```bash
 make up
 ```
 
-## down
+### down
 
 ```bash
 make down
 ```
 
-## reup
+### reup
 
 up again after down
 
@@ -45,7 +45,7 @@ up again after down
 make reup
 ```
 
-## clean
+### clean
 
 ```bash
 make clean
