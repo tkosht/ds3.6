@@ -53,3 +53,11 @@ make reup
 make clean
 ```
 
+## Preparation sample data
+
+```bash
+sh bin/d.sh
+find app/data
+```
+
+
