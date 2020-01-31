@@ -1,4 +1,6 @@
-# simple repository for data science on ubuntu:python3.6
+# ds3.6
+
+simple repository for data science on ubuntu:python3.6
 
 ## Available for VSCode
 you can use on VSCode like `Open Folder in Container`
