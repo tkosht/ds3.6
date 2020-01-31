@@ -1,0 +1,22 @@
+{
+	"name": "Docker Compose: simple python3 container",
+	"dockerComposeFile": [
+		"../docker-compose.yml"
+	],
+	"service": "ds3.6",
+	"workspaceFolder": "/home/dsuser/workspace",
+	"settings": { 
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "python.pythonPath": "/usr/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": true,
+        "python.linting.pylintPath": "/usr/local/bin/pylint"
+	},
+	// "remoteUser": "vscode",
+	// "runServices": [],
+	// "shutdownAction": "none",
+	// "postCreateCommand": "apt-get update && apt-get install -y git",
+	"extensions": [
+        "ms-python.python"
+    ]
+}

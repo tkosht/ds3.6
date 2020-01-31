@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  ds3.6:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        user_name: $user_name
+        group_name: $group_name
+    image: ubuntu:ds3.6
+    container_name: ds3.6
+    tty: true
+    volumes:
+        - ./app:/home/$user_name/workspace
+    working_dir: /home/$user_name/workspace
