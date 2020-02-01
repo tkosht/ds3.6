@@ -1,10 +1,7 @@
-ps:
-	docker-compose ps
+ps images down:
+	docker-compose $@
 
 im:images
-
-images:
-	docker-compose images
 
 build:
 	docker-compose build --no-cache
@@ -14,9 +11,6 @@ up:
 
 active:
 	docker-compose up
-
-down:
-	docker-compose down
 
 reup: down up
 
