@@ -13,6 +13,7 @@ seaborn
 pudb
 pylint
 flake8
+black
 coverage
 pytest
 pytest-flake8
