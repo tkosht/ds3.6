@@ -17,3 +17,4 @@ reup: down up
 clean:
 	docker-compose down --rmi all
 	sudo rm -rf app/__pycache__
+	sudo rm -rf app/img
