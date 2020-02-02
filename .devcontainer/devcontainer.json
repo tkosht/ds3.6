@@ -13,7 +13,7 @@
 		"python.linting.flake8Enabled": true,
         "python.linting.pylintPath": "/usr/local/bin/pylint",
 		"python.linting.flake8Path": "/usr/local/bin/flake8",
-		"python.linting.flake8Args": ["--ignore=E501"],
+		"python.linting.flake8Args": [ ],
 		"python.formatting.provider": "black",
 		"editor.formatOnSave": true,
 		"editor.formatOnPaste": false
