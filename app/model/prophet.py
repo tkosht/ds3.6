@@ -93,9 +93,6 @@ class EstimatorProphet(Estimator):
             .reset_index(drop=True)
         )
 
-        if len(self.exogs) == 0:
-            return future_date
-
         df = pandas.concat([self.trained_df, predict_df], axis=0)
         df.ds = pandas.to_datetime(df.ds)
         data_df = future_date.merge(df, how="left", on="ds")
@@ -104,6 +101,7 @@ class EstimatorProphet(Estimator):
         data_df = data_df.fillna(0)  # fill far futures
 
         cols = ["ds"]
-        cols.extend(self.exogs)  # add regressor columns
+        if len(self.exogs) > 0:
+            cols.extend(self.exogs)  # add exog columns for regressor
         futures = data_df[cols]
         return futures
