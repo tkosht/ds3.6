@@ -45,6 +45,7 @@ if __name__ == "__main__":
 
     pipe.fit(train_df, y=None)
     forecast_df = pipe.predict(test_df, **predict_params)
+    forecast_df.to_csv("data/forecasted_simple.tsv", sep="\t", header=True, index=False)
     plotter.save_plot("img/forecasted_simple.png", forecast_df, train_df, test_df)
 
     # with exog
@@ -58,6 +59,7 @@ if __name__ == "__main__":
 
     pipe.fit(train_df, y=None)
     forecast_df = pipe.predict(test_df, **predict_params)
+    forecast_df.to_csv("data/forecasted_exog.tsv", sep="\t", header=True, index=False)
     plotter.save_plot("img/forecasted_exog.png", forecast_df, train_df, test_df)
 
     print("OK")
