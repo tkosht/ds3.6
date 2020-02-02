@@ -24,8 +24,9 @@ docutils==0.15
 Sphinx
 
 # other tools
-jq
+notebook
 python-dotenv
+jq
 click
 awscli
 
