@@ -1,4 +1,8 @@
+import datetime
+import pathlib
 import pandas
+from dateutil.relativedelta import relativedelta
+from matplotlib import pyplot
 
 
 def make_plot_block(verif, start_date, end_date, ax=None):
@@ -32,3 +36,30 @@ def make_verif(forecast, data_train, data_test):
     data = pandas.concat([data_train, data_test], axis=0)
     forecast.loc[:, "y"] = data.loc[:, "y"]
     return forecast
+
+
+def save_plot(img_file, forecast_df, train_df, test_df, plot_freq="6M"):
+    verif = make_verif(forecast_df, train_df, test_df)
+    predicted_date = test_df.ds.iloc[0]
+
+    s = verif.ds.iloc[0]
+    e = verif.ds.iloc[-1]
+    intervals = pandas.date_range(s, e, freq=plot_freq) + datetime.timedelta()
+    if intervals[-1] < e:
+        date_end = intervals[-1] + relativedelta(months=6)
+        intervals = pandas.Series(intervals).append(pandas.Series(date_end))
+
+    n = len(intervals) - 1
+    _, axes = pyplot.subplots(nrows=n, figsize=(14, 16), sharey=True)
+
+    for idx, (s, e) in enumerate(zip(intervals[:-1], intervals[1:])):
+        s = s.strftime("%Y/%m/%d")
+        e = e.strftime("%Y/%m/%d")
+        ax = axes[idx]
+        make_plot_block(verif, s, e, ax=ax)
+        if s <= predicted_date <= e:
+            pyplot.axvline(x=predicted_date)
+    pyplot.tight_layout()
+
+    pathlib.Path("img").mkdir(parents=True, exist_ok=True)
+    pyplot.savefig(img_file)

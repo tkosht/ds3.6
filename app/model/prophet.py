@@ -1,20 +1,10 @@
 import pandas
 import datetime
 from fbprophet import Prophet
+from .base import Transer, Estimator
 
 
-class Transer(object):
-    def __init__(self):
-        pass
-
-    def fit(self, X, y, **params):
-        return self
-
-    def transform(self, X, **params):
-        return X
-
-
-class Preprocess(Transer):
+class PreprocessProphet(Transer):
     def __init__(self):
         pass
 
@@ -23,14 +13,6 @@ class Preprocess(Transer):
 
     def transform(self, train_predict_df, **params):
         return train_predict_df
-
-
-class Estimator(object):
-    def fit(self, X, y, **params):
-        return self
-
-    def predict(self, X, **params):
-        return X
 
 
 class EstimatorProphet(Estimator):
