@@ -16,6 +16,7 @@ find app/data
 ## run the sample program with `fbprophet`
 
 you can run via `make` command the sample prgram which predicts by using fbprophet
+(around 20 minutes)
 
 ```bash
 make
