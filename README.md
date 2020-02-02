@@ -38,12 +38,16 @@ you can view the images of predicted images
     display app/img/forecasted_simple.png
     ```
 
+    ![forecasted_simple.png](app/img/forecasted_simple.png)
+
+
 - prediction result with exogenous data
 
     ```bash
     display app/img/forecasted_exog.png
     ```
 
+    ![forecasted_exog.png](app/img/forecasted_exog.png)
 
 ## debug the program
 
