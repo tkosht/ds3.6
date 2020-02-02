@@ -32,6 +32,8 @@ if __name__ == "__main__":
     # split dataset
     train_df, test_df = dcaset.split(predict_date)
 
+    predict_params = dict(predict_by=predict_by, freq="D")
+
     # without exog
     m = create_model(holidays_df)
     exogs = []
@@ -42,7 +44,7 @@ if __name__ == "__main__":
     pipe = make_pipeline(*steps)
 
     pipe.fit(train_df, y=None)
-    forecast_df = pipe.predict(test_df, by_date=predict_by)
+    forecast_df = pipe.predict(test_df, **predict_params)
     plotter.save_plot("img/forecasted_simple.png", forecast_df, train_df, test_df)
 
     # with exog
@@ -55,7 +57,7 @@ if __name__ == "__main__":
     pipe = make_pipeline(*steps)
 
     pipe.fit(train_df, y=None)
-    forecast_df = pipe.predict(test_df, by_date=predict_by)
+    forecast_df = pipe.predict(test_df, **predict_params)
     plotter.save_plot("img/forecasted_exog.png", forecast_df, train_df, test_df)
 
     print("OK")

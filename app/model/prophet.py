@@ -51,26 +51,26 @@ class EstimatorProphet(Estimator):
         return self
 
     def predict(self, predict_df, **params) -> pandas.DataFrame:
-        by_date = self.trained_date
-        if "by_date" in params:
-            by_date = params["by_date"]
+        predict_by = self.trained_date
+        if "predict_by" in params:
+            predict_by = params["predict_by"]
         freq = "D"
         if "freq" in params:
-            freq = params.get("freq")
+            freq = params["freq"]
 
-        futures = self.make_futures(predict_df, by_date, freq)
+        futures = self.make_futures(predict_df, predict_by, freq)
         forecast_df = self.model.predict(futures)
         return forecast_df
 
     def make_futures(
-        self, predict_df: pandas.DataFrame, by_date: str = "2020-12-31", freq="D"
+        self, predict_df: pandas.DataFrame, predict_by: str = "2020-12-31", freq="D"
     ):
-        by_date = datetime.datetime.strptime(by_date, "%Y-%m-%d")
+        predict_by = datetime.datetime.strptime(predict_by, "%Y-%m-%d")
         predict_df = predict_df.copy()
         trained_date = datetime.datetime.strptime(self.trained_date, "%Y-%m-%d")
         predict_date = trained_date + datetime.timedelta(1)
         future_date = (
-            pandas.date_range(predict_date, by_date, freq=freq, name="ds")
+            pandas.date_range(predict_date, predict_by, freq=freq, name="ds")
             .to_frame()
             .reset_index(drop=True)
         )
