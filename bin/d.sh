@@ -9,3 +9,7 @@ cd -
 tar xzf data.tar.gz
 
 rm -rf Auckland_Cycling data.tar.gz
+
+if [ ! -f "utils.py" ]; then
+    wget https://raw.githubusercontent.com/nicolasfauchereau/Auckland_Cycling/master/code/utils.py
+fi

@@ -3,7 +3,7 @@
 	"dockerComposeFile": [
 		"../docker-compose.yml"
 	],
-	"service": "ds3.6",
+	"service": "app",
 	"workspaceFolder": "/home/dsuser/workspace",
 	"settings": { 
         "terminal.integrated.shell.linux": "/bin/bash",
