@@ -1,0 +1,5 @@
+prediction:
+  freq: "D"
+  # freq: "W-MON"
+  predict_date: "2016-01-01"
+  predict_by: "2018-12-31"

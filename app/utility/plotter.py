@@ -35,12 +35,20 @@ def make_verif(forecast, data_train, data_test):
     data_test.index = pandas.to_datetime(data_test.ds)
     data = pandas.concat([data_train, data_test], axis=0)
     forecast.loc[:, "y"] = data.loc[:, "y"]
+    forecast.reset_index(drop=True, inplace=True)
+    # for aggregated data like weekly data
+    s = forecast.ds.iloc[0]
+    e = forecast.ds.iloc[-1]
+    x = pandas.date_range(s, e, freq="D", name="ds").to_frame().reset_index(drop=True)
+    f = x.merge(forecast, on="ds")
+    f.index = f.ds
+    forecast = f
     return forecast
 
 
 def save_plot(img_file, forecast_df, train_df, test_df, plot_freq="6M"):
     verif = make_verif(forecast_df, train_df, test_df)
-    predicted_date = test_df.ds.iloc[0]
+    predict_date = test_df.ds.iloc[0].to_pydatetime()
 
     s = verif.ds.iloc[0]
     e = verif.ds.iloc[-1]
@@ -53,12 +61,12 @@ def save_plot(img_file, forecast_df, train_df, test_df, plot_freq="6M"):
     _, axes = pyplot.subplots(nrows=n, figsize=(14, 16), sharey=True)
 
     for idx, (s, e) in enumerate(zip(intervals[:-1], intervals[1:])):
-        s = s.strftime("%Y/%m/%d")
-        e = e.strftime("%Y/%m/%d")
         ax = axes[idx]
+        s = s.strftime("%Y-%m-%d")
+        e = e.strftime("%Y-%m-%d")
         make_plot_block(verif, s, e, ax=ax)
-        if s <= predicted_date <= e:
-            pyplot.axvline(x=predicted_date)
+        if s <= predict_date.strftime("%Y-%m-%d") <= e:
+            ax.axvline(x=predict_date)
     pyplot.tight_layout()
 
     pathlib.Path("img").mkdir(parents=True, exist_ok=True)

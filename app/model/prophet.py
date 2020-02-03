@@ -48,6 +48,10 @@ class EstimatorProphet(Estimator):
         self.model.fit(train_df)
         self.trained_df = train_df
         self.trained_date = train_df.ds.iloc[-1]
+        if isinstance(self.trained_date, str):
+            self.trained_date = datetime.datetime.strptime(
+                self.trained_date, "%Y-%m-%d"
+            )
         return self
 
     def predict(self, predict_df, **params) -> pandas.DataFrame:
@@ -67,8 +71,7 @@ class EstimatorProphet(Estimator):
     ):
         predict_by = datetime.datetime.strptime(predict_by, "%Y-%m-%d")
         predict_df = predict_df.copy()
-        trained_date = datetime.datetime.strptime(self.trained_date, "%Y-%m-%d")
-        predict_date = trained_date + datetime.timedelta(1)
+        predict_date = self.trained_date + datetime.timedelta(1)
         future_date = (
             pandas.date_range(predict_date, predict_by, freq=freq, name="ds")
             .to_frame()

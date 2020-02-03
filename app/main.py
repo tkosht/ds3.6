@@ -1,5 +1,13 @@
+import yaml
+import pandas
 from fbprophet import Prophet
 import utility.plotter as plotter
+
+
+def load_params():
+    with open("main.yml", "r") as f:
+        params = yaml.load(f)
+    return params
 
 
 def create_model(holidays_df) -> Prophet:
@@ -18,21 +26,23 @@ def create_model(holidays_df) -> Prophet:
 
 
 if __name__ == "__main__":
-    import pandas
     from sklearn.pipeline import make_pipeline
     from model.prophet import PreprocessProphet, EstimatorProphet
     from dataset.auckset import DatasetCyclicAuckland
 
-    predict_date = "2016-01-01"
-    predict_by = "2018-12-31"
+    params = load_params()
+
+    freq = params["prediction"]["freq"]
+    predict_date = params["prediction"]["predict_date"]
+    predict_by = params["prediction"]["predict_by"]
 
     holidays_df = pandas.read_csv("data/holiday.tsv", sep="\t", header=0)
-    dcaset = DatasetCyclicAuckland()
+    dcaset = DatasetCyclicAuckland(freq=freq)
 
     # split dataset
     train_df, test_df = dcaset.split(predict_date)
 
-    predict_params = dict(predict_by=predict_by, freq="D")
+    predict_params = dict(predict_by=predict_by, freq=freq)
 
     # without exog
     m = create_model(holidays_df)
