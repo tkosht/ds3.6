@@ -27,6 +27,7 @@ def create_model(holidays_df) -> Prophet:
 
 if __name__ == "__main__":
     from sklearn.pipeline import make_pipeline
+    from sklearn.pipeline import Pipeline
     from model.prophet import PreprocessProphet, EstimatorProphet
     from dataset.auckset import DatasetCyclicAuckland
 
@@ -42,18 +43,19 @@ if __name__ == "__main__":
     # split dataset
     train_df, test_df = dcaset.split(predict_date)
 
+    fit_params = dict(model__thin=2, model__chains=5, model__seed=777)
     predict_params = dict(predict_by=predict_by, freq=freq)
 
     # without exog
     m = create_model(holidays_df)
     exogs = []
     steps = [
-        PreprocessProphet(),
-        EstimatorProphet(holidays_df, exogs, m),
+        ("preprocess", PreprocessProphet()),
+        ("model", EstimatorProphet(holidays_df, exogs, m)),
     ]
-    pipe = make_pipeline(*steps)
+    pipe = Pipeline(steps=steps)
 
-    pipe.fit(train_df, y=None)
+    pipe.fit(train_df, y=None, **fit_params)
     forecast_df = pipe.predict(test_df, **predict_params)
     forecast_df.to_csv("data/forecasted_simple.tsv", sep="\t", header=True, index=False)
     plotter.save_plot("img/forecasted_simple.png", forecast_df, train_df, test_df)
@@ -62,12 +64,12 @@ if __name__ == "__main__":
     m = create_model(holidays_df)
     exogs = ["temp", "rain", "sun", "wind"]
     steps = [
-        PreprocessProphet(),
-        EstimatorProphet(holidays_df, exogs, m),
+        ("preprocess", PreprocessProphet()),
+        ("model", EstimatorProphet(holidays_df, exogs, m)),
     ]
-    pipe = make_pipeline(*steps)
+    pipe = Pipeline(steps=steps)
 
-    pipe.fit(train_df, y=None)
+    pipe.fit(train_df, y=None, **fit_params)
     forecast_df = pipe.predict(test_df, **predict_params)
     forecast_df.to_csv("data/forecasted_exog.tsv", sep="\t", header=True, index=False)
     plotter.save_plot("img/forecasted_exog.png", forecast_df, train_df, test_df)

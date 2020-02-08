@@ -45,7 +45,7 @@ class EstimatorProphet(Estimator):
         assert set(self.exogs).issubset(set(X.columns))
         # y will not be used
         train_df = X.copy()
-        self.model.fit(train_df)
+        self.model.fit(train_df, **params)
         self.trained_df = train_df
         self.trained_date = train_df.ds.iloc[-1]
         if isinstance(self.trained_date, str):
