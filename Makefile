@@ -1,11 +1,13 @@
-all: run
+default: run
 
-data: download convert
+all: data run
+
+data: convert
 
 download:
 	sh bin/d.sh
 
-convert: download
+convert: download up
 	docker-compose exec app python convert.py
 
 run: up

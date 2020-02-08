@@ -4,16 +4,21 @@ simple repository for data science on ubuntu:python3.6
 
 # for sample prediction
 
-## preparation of sample data
+## simple execution all tasks
+
+```bash
+make all
+```
+
+### preparation of sample data
 
 you can download `Auckland Cycling` dataset
 
 ```bash
-sh bin/d.sh
-find app/data
+make data
 ```
 
-## run the sample program with `fbprophet`
+### run the sample program with `fbprophet`
 
 you can run via `make` command the sample prgram which predicts by using fbprophet
 (around 20 minutes)
@@ -28,7 +33,7 @@ or
 make run
 ```
 
-### result
+### check results
 
 you can view the images of predicted images
 
