@@ -13,7 +13,7 @@ def load_params():
 def create_model(holidays_df) -> Prophet:
     return Prophet(
         # mcmc_samples=10,  # for debugging
-        mcmc_samples=100,
+        mcmc_samples=200,
         holidays=holidays_df,
         holidays_prior_scale=0.25,
         changepoint_prior_scale=0.01,
@@ -26,7 +26,6 @@ def create_model(holidays_df) -> Prophet:
 
 
 if __name__ == "__main__":
-    from sklearn.pipeline import make_pipeline
     from sklearn.pipeline import Pipeline
     from model.prophet import PreprocessProphet, EstimatorProphet
     from dataset.auckset import DatasetCyclicAuckland
