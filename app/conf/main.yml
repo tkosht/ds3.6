@@ -14,8 +14,8 @@ data:
 
 model: 
   Prophet:
-    growth: "logistic"
-    # growth: "linear"
+    # growth: "logistic"
+    growth: "linear"
     # mcmc_samples: 10  # for debugging
     mcmc_samples: 200
     holidays_prior_scale: 0.25
