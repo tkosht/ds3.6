@@ -44,7 +44,7 @@ you can view the images of predicted images
     display app/img/forecasted_simple.png
     ```
 
-    ![forecasted_simple.png](app/img/forecasted_simple.png)
+    ![forecasted_simple_linear.png](app/img/forecasted_simple_linear.png)
 
 
 - prediction result with exogenous data
@@ -53,7 +53,7 @@ you can view the images of predicted images
     display app/img/forecasted_exog.png
     ```
 
-    ![forecasted_exog.png](app/img/forecasted_exog.png)
+    ![forecasted_exog_linear.png](app/img/forecasted_exog_linear.png)
 
 ## debug the program
 
