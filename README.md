@@ -41,7 +41,7 @@ you can view the images of predicted images
 - prediction result with no exogenous data
 
     ```bash
-    display app/img/forecasted_simple.png
+    display app/img/forecasted_simple_linear.png
     ```
 
     ![forecasted_simple_linear.png](app/img/forecasted_simple_linear.png)
@@ -50,7 +50,7 @@ you can view the images of predicted images
 - prediction result with exogenous data
 
     ```bash
-    display app/img/forecasted_exog.png
+    display app/img/forecasted_exog_linear.png
     ```
 
     ![forecasted_exog_linear.png](app/img/forecasted_exog_linear.png)
