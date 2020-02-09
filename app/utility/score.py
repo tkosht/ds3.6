@@ -8,53 +8,61 @@ class Score(object):
         self.p = numpy.array(p)  # predicted/forecast values
         assert len(self.a) == len(self.p)
 
-    def mae(self):
+    def mae(self) -> numpy.float:
         return numpy.abs((self.a - self.p)).mean()
 
-    def mse(self):
+    def mse(self) -> numpy.float:
         return ((self.a - self.p) ** 2).mean()
 
-    def rmse(self):
+    def rmse(self) -> numpy.float:
         return self.mse() ** 0.5
 
-    def mape(self):
+    def mape(self) -> numpy.float:
         a = self._adjusted_values(self.a)
-        return numpy.abs(((a - self.p) / self.a)).mean()
+        return numpy.abs(((self.a - self.p) / a)).mean()
 
-    def mspe(self):
+    def mspe(self) -> numpy.float:
         a = self._adjusted_values(self.a)
-        return (((a - self.p) / self.a) ** 2).mean()
+        return (((self.a - self.p) / a) ** 2).mean()
 
-    def rmspe(self):
+    def rmspe(self) -> numpy.float:
         return self.mspe() ** 0.5
 
-    def _adjusted_values(self, v):
+    def _adjusted_values(self, v) -> numpy.ndarray:
         v = v.copy()
-        v[v == 0] = v[v != 0].mean()
-        v[v == 0] = 1.0  # if case of all 0 constant values
+        c = 1.0
+        if (v != 0).any():
+            c = v[v != 0].mean()
+        v[v == 0] = c
         return v
 
-    def sqmrpa(self):  # square measurement sqmr of prediction/actual
+    def sqmrpa(self) -> numpy.float:  # square measurement sqmr of prediction/actual
         a = self._adjusted_values(self.a)
         return self.p.sum() / a.sum()
 
-    def sqmrap(self):  # square measurement sqmr of actual/prediction
+    def sqmrap(self) -> numpy.float:  # square measurement sqmr of actual/prediction
         p = self._adjusted_values(self.p)
         return self.a.sum() / p.sum()
 
-    def gmpa(self):
+    def gmpa(self) -> numpy.float:
         a = self._adjusted_values(self.a)
-        r = self.p / a
+        r = numpy.abs(self.p / a)
+        if (r == 0).all():
+            return 0.0
         return r.prod() ** (1 / len(r))
 
-    def gmap(self):
+    def gmap(self) -> numpy.float:
         p = self._adjusted_values(self.p)
-        r = self.a / p
+        r = numpy.abs(self.a / p)
+        if (r == 0).all():
+            return 0.0
         return r.prod() ** (1 / len(r))
 
-    def rsq(self):  # R square
+    def rsq(self) -> numpy.float:  # R square
         srs = ((self.a - self.p) ** 2).sum()  # sum of residuals squared
         srm = ((self.a - self.a.mean()) ** 2).sum()  # sum of residual from mean
+        if srm == 0:
+            srm = 1.0
         return 1 - srs / srm
 
     @property
@@ -92,5 +100,15 @@ if __name__ == "__main__":
     score = Score(y, p)
     print(score.df)
     print(score.json)
-    score.to_tsv("score.tsv")
+    score.to_csv("score.tsv")
     score.to_json("score.json")
+
+    y = numpy.array([0.1, 0.2, -0.1])
+    p = numpy.array([0.0, 0.0, 0.0])
+    score = Score(y, p)
+    print(score.df)
+
+    y = numpy.array([0.0, 0.0, 0.0])
+    p = numpy.array([0.1, 0.2, -0.1])
+    score = Score(y, p)
+    print(score.df)
