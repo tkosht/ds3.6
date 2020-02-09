@@ -43,8 +43,12 @@ class EstimatorProphet(Estimator):
         assert "ds" in X.columns  # date series
         assert "y" in X.columns  # actual values
         assert set(self.exogs).issubset(set(X.columns))
-        # y will not be used
         train_df = X.copy()
+        if "cap" not in train_df.columns:
+            mn = train_df.y.mean()
+            sd = train_df.y.std()
+            cap = mn + 3 * sd
+            train_df["cap"] = cap
         self.model.fit(train_df, **params)
         self.trained_df = train_df
         self.trained_date = train_df.ds.iloc[-1]
@@ -63,10 +67,13 @@ class EstimatorProphet(Estimator):
             freq = params["freq"]
 
         futures = self.make_futures(predict_df, predict_by, freq)
+        recent = 10
         if "cap" in predict_df.columns:
             futures["cap"] = predict_df.cap
-            cap = predict_df.cap.tail(10).mean()
+            cap = predict_df.cap.tail(recent).mean()
             futures.cap.fillna(cap, inplace=True)
+        else:
+            futures["cap"] = self.trained_df.cap.tail(recent).mean()
         forecast_df = self.model.predict(futures)
         return forecast_df
 

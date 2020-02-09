@@ -42,11 +42,6 @@ if __name__ == "__main__":
 
     # split dataset
     train_df, test_df = dcaset.split(predict_date)
-    mn = train_df.y.mean()
-    sd = train_df.y.std()
-    cap = mn + 3 * sd
-    train_df["cap"] = cap
-    test_df["cap"] = cap
 
     fit_params = dict(model__thin=2, model__chains=5, model__seed=777)
     predict_params = dict(predict_by=predict_by, freq=freq)
@@ -77,7 +72,6 @@ if __name__ == "__main__":
 
     # with exog
     m = create_model(holidays_df, **params)
-    # exogs = ["temp", "rain", "sun", "wind"]
     exogs = params["data"]["exogs"]
     steps = [
         ("preprocess", PreprocessProphet()),
