@@ -63,6 +63,10 @@ class EstimatorProphet(Estimator):
             freq = params["freq"]
 
         futures = self.make_futures(predict_df, predict_by, freq)
+        if "cap" in predict_df.columns:
+            futures["cap"] = predict_df.cap
+            cap = predict_df.cap.tail(10).mean()
+            futures.cap.fillna(cap, inplace=True)
         forecast_df = self.model.predict(futures)
         return forecast_df
 

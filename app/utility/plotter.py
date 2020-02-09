@@ -71,3 +71,8 @@ def save_plot(img_file, forecast_df, train_df, test_df, plot_freq="6M"):
 
     pathlib.Path("img").mkdir(parents=True, exist_ok=True)
     pyplot.savefig(img_file)
+
+
+def save_plot_components(img_file, m, forecast_df):
+    m.plot_components(forecast_df)
+    pyplot.savefig(img_file)

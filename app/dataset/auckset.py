@@ -23,8 +23,9 @@ class DatasetCyclicAuckland(TimeSeriesDataset):
         self.data_df = data_df
         return self
 
-    def _reset_index(self):
-        self.data_df.reset_index(inplace=True)
+    @property
+    def df(self) -> pandas.DataFrame:
+        return self.data_df
 
     def split(self, predict_date: str) -> (pandas.DataFrame, pandas.DataFrame):
         train_df = self.data_df[:predict_date].iloc[:-1]
