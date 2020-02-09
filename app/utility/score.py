@@ -1,6 +1,5 @@
 import numpy
 import pandas
-from scipy.stats.mstats import gmean
 
 
 class Score(object):
@@ -35,21 +34,23 @@ class Score(object):
         v[v == 0] = 1.0  # if case of all 0 constant values
         return v
 
-    def sqmr_pa(self):  # square measurement sqmr of prediction/actual
+    def sqmrpa(self):  # square measurement sqmr of prediction/actual
         a = self._adjusted_values(self.a)
         return self.p.sum() / a.sum()
 
-    def sqmr_ap(self):  # square measurement sqmr of actual/prediction
+    def sqmrap(self):  # square measurement sqmr of actual/prediction
         p = self._adjusted_values(self.p)
         return self.a.sum() / p.sum()
 
     def gmpa(self):
         a = self._adjusted_values(self.a)
-        return gmean(self.p / a)
+        r = self.p / a
+        return r.prod() ** (1 / len(r))
 
     def gmap(self):
         p = self._adjusted_values(self.p)
-        return gmean(self.a / p)
+        r = self.a / p
+        return r.prod() ** (1 / len(r))
 
     def rsq(self):  # R square
         srs = ((self.a - self.p) ** 2).sum()  # sum of residuals squared
@@ -65,8 +66,8 @@ class Score(object):
             mape=self.mape(),
             mspe=self.mspe(),
             rmspe=self.rmspe(),
-            sqmr_pa=self.sqmr_pa(),
-            sqmr_ap=self.sqmr_ap(),
+            sqmrpa=self.sqmrpa(),
+            sqmrap=self.sqmrap(),
             gmpa=self.gmpa(),
             gmap=self.gmap(),
             rsq=self.rsq(),
