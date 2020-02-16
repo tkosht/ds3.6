@@ -66,8 +66,8 @@ class Score(object):
         return 1 - srs / srm
 
     @property
-    def df(self) -> pandas.DataFrame:
-        s = dict(
+    def dic(self) -> dict:
+        return dict(
             mae=self.mae(),
             mse=self.mse(),
             rmse=self.rmse(),
@@ -80,8 +80,12 @@ class Score(object):
             gmap=self.gmap(),
             rsq=self.rsq(),
         )
-        df = pandas.DataFrame(s, index=["scores"])
-        return df.T
+
+    @property
+    def df(self) -> pandas.DataFrame:
+        s = self.dic
+        df = pandas.DataFrame(s, index=["scores"]).T
+        return df
 
     def to_csv(self, tsv_file, sep=","):
         self.df.to_csv(tsv_file, sep=sep, header=False)

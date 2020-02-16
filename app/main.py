@@ -1,5 +1,7 @@
 import yaml
 import pandas
+import joblib
+import pathlib
 
 from fbprophet import Prophet
 from typing import Union
@@ -31,8 +33,6 @@ def dump_model(model, dump_file):
 
 
 if __name__ == "__main__":
-    import joblib
-    import pathlib
     from sklearn.pipeline import Pipeline
     from model.prophet import PreprocessProphet, EstimatorProphet
     from dataset.auckset import DatasetCyclicAuckland
