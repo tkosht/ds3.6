@@ -59,7 +59,7 @@ class EstimatorProphet(Estimator):
         return self
 
     def predict(self, predict_df, **params) -> pandas.DataFrame:
-        predict_by = self.trained_date
+        predict_by = self.trained_date + datetime.timedelta(days=365)
         if "predict_by" in params:
             predict_by = params["predict_by"]
         freq = "D"
