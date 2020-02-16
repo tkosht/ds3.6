@@ -8,7 +8,7 @@ import utility.plotter as plotter
 
 def load_params() -> dict:
     with open("conf/main.yml", "r") as f:
-        params = yaml.load(f)
+        params = yaml.full_load(f)
     return params
 
 
@@ -17,15 +17,22 @@ def create_model(
 ) -> Union[
     Prophet,
 ]:
-    model_name = list(params["model"].keys())[0]
-    model_params = params["model"][model_name]
+    model_name = params["model"]["class"]
+    model_params = params["model"]["init"]
     model_class = eval(model_name)
     if model_class == Prophet:
         model_params.update(dict(holidays=holidays_df))
     return model_class(**model_params)
 
 
+def dump_model(model, dump_file):
+    pathlib.Path(dump_file).parent.mkdir(exist_ok=True, parents=True)
+    joblib.dump(model, dump_file, compress=("gzip", 3))
+
+
 if __name__ == "__main__":
+    import joblib
+    import pathlib
     from sklearn.pipeline import Pipeline
     from model.prophet import PreprocessProphet, EstimatorProphet
     from dataset.auckset import DatasetCyclicAuckland
@@ -43,7 +50,8 @@ if __name__ == "__main__":
     # split dataset
     train_df, test_df = dcaset.split(predict_date)
 
-    fit_params = dict(model__thin=2, model__chains=5, model__seed=777)
+    # setup params
+    fit_params = {"model__" + k: v for k, v in params["model"]["fit"].items()}
     predict_params = dict(predict_by=predict_by, freq=freq)
 
     # without exog
@@ -69,6 +77,7 @@ if __name__ == "__main__":
 
     scr = Score(test_df.y, forecast_df.yhat.iloc[: len(test_df)])
     scr.to_csv(f"data/score_simple_{m.growth}.tsv", sep="\t")
+    dump_model(pipe, f"data/model/pipe.simple.{m.growth}.gz")
 
     # with exog
     m = create_model(holidays_df, **params)
@@ -90,5 +99,6 @@ if __name__ == "__main__":
     )
     scr = Score(test_df.y, forecast_df.yhat.iloc[: len(test_df)])
     scr.to_csv(f"data/score_exog_{m.growth}.tsv", sep="\t")
+    dump_model(pipe, f"data/model/pipe.exog.{m.growth}.gz")
 
     print("OK")
